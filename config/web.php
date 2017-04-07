@@ -73,7 +73,7 @@ $config = [
             ],
         ],
     ],
-    'as access'=>[
+/*    'as access'=>[
         'class'=>'app\components\AccessFilter',
         'level'=>4,
         'only'=>[
@@ -82,12 +82,9 @@ $config = [
         'except'=>[
             //'device::view',
             'site/error',
-            'site/signup',
-            'site/login',
-            'site/index',
-            'site/logout'
+            'site'
         ],
-    ],
+    ],*/
     'params' => $params,
 ];
 

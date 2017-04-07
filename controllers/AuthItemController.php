@@ -15,21 +15,6 @@ use yii\filters\VerbFilter;
 class AuthItemController extends WebController
 {
     /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
-
-    /**
      * Lists all AuthItem models.
      * @return mixed
      */

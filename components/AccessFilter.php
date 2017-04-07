@@ -29,8 +29,17 @@ class AccessFilter extends ActionFilter
         return parent::beforeAction($action);
     }
 
+    /**
+     * restful api 的检查
+     * @Author   WindGreen<yqfwind@163.com>
+     * @DateTime 2017-04-07T14:53:25+0800
+     * @param    [type]                     $action [description]
+     * @return   [type]                             [description]
+     */
     protected function checkModelAccess($action)
     {
+        if(!$this->model) throw new \Exception('Model not defined', 1);
+        
         $modelName=(new \ReflectionClass($this->model))->getShortName();
         if(!\Yii::$app->user->can($action->id.$modelName)) {
             throw new \yii\web\ForbiddenHttpException("Forbidden {$action->id} model:{$modelName}");

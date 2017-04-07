@@ -12,7 +12,7 @@ $config = [
             'class' => 'yii\web\Response',
         ],
         'user' => [
-            'identityClass'   => 'app\models\ApiIdentity',
+            'identityClass'   => 'app\models\UserIdentity',
             'enableAutoLogin' => false,
             'enableSession'   => false,
             'loginUrl'        =>null,

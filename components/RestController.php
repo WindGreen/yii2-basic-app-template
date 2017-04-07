@@ -2,7 +2,7 @@
 
 namespace app\components;
 
-use \app\models\ApiIdentity;
+use \app\models\UserIdentity;
 use \yii\filters\auth\CompositeAuth;
 use \yii\filters\auth\HttpBasicAuth;
 use \app\components\AccessFilter;
@@ -18,7 +18,7 @@ class RestController extends \yii\rest\ActiveController
      * @throws ForbiddenHttpException if the user does not have access
      */
     public function checkAccess($action, $model = null, $params = [])
-    {return true;
+    {
         if($model==null) $model=$this->modelClass;
         $modelName=(new \ReflectionClass($model))->getShortName();
         $checkParams = $model ? [$modelName=>$model] : null;
@@ -36,13 +36,13 @@ class RestController extends \yii\rest\ActiveController
                 [
                     'class'=>HttpBasicAuth::className(),
                     //'auth'=>[ApiIdentity::className(),'validateUidAndToken']
-                    'auth'=>[ApiIdentity::className(),'findIdentityByAccessToken']
+                    'auth'=>[UserIdentity::className(),'findIdentityByAccessToken']
                 ]                
             ],
         ];
         $behaviors['access']=[
             'class'=>AccessFilter::className(),
-            'level'=>AccessFilter::LEVEL_NONE,//模型级别访问控制
+            'level'=>AccessFilter::LEVEL_NONE,
             'model'=>$this->modelClass,
         ];
         return $behaviors;

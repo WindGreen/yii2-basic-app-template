@@ -42,6 +42,7 @@ class AuthItem extends \app\components\ActiveRecordModel
             [['type', 'created_at', 'updated_at'], 'integer'],
             [['description', 'data'], 'string'],
             [['name', 'rule_name'], 'string', 'max' => 64],
+            ['rule_name','default'],
         ];
     }
 

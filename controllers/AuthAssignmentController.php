@@ -14,20 +14,6 @@ use yii\filters\VerbFilter;
  */
 class AuthAssignmentController extends WebController
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
 
     /**
      * Lists all AuthAssignment models.
