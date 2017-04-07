@@ -63,6 +63,7 @@ class AccessFilter extends ActionFilter
         if(!\Yii::$app->user->can($module)) {
             throw new \yii\web\ForbiddenHttpException("Forbidden access module:{$module}");
         }
+        return true;
     }
 
 }
