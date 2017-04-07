@@ -37,17 +37,15 @@ COLLATE = utf8_unicode_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `user` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `uid` CHAR(32) NOT NULL,
   `username` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
-  `auth_key` VARCHAR(32) CHARACTER SET 'utf8' NOT NULL,
-  `password_hash` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
-  `password_reset_token` VARCHAR(255) CHARACTER SET 'utf8' NULL DEFAULT NULL,
   `email` VARCHAR(255) CHARACTER SET 'utf8' NULL,
   `status` SMALLINT(6) NOT NULL DEFAULT '10',
-  `created_at` INT(11) NOT NULL,
-  `updated_at` INT(11) NOT NULL,
+  `created_at` INT(11) NULL,
+  `updated_at` INT(11) NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `username` (`username` ASC),
-  UNIQUE INDEX `password_reset_token` (`password_reset_token` ASC))
+  UNIQUE INDEX `uid` (`uid`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_unicode_ci;

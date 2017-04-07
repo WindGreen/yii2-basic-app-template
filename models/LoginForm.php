@@ -18,6 +18,7 @@ class LoginForm extends Model
     public $rememberMe = true;
 
     private $_user = false;
+    private $_authenticaiton=false;
 
 
     /**
@@ -45,9 +46,9 @@ class LoginForm extends Model
     public function validatePassword($attribute, $params)
     {
         if (!$this->hasErrors()) {
-            $user = $this->getUser();
+            $auth = $this->getAuthentication();
 
-            if (!$user || !$user->validatePassword($this->password)) {
+            if (!$auth || !$auth->validatePassword($this->password)) {
                 $this->addError($attribute, 'Incorrect username or password.');
             }
         }
@@ -60,22 +61,24 @@ class LoginForm extends Model
     public function login()
     {
         if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
+            $auth = $this->getAuthentication();
+            $userIdentity=UserIdentity::findOne($auth->toArray(['user_id','identity_type']));
+            if(!$userIdentity) $userIdentity=new UserIdentity;
+            $userIdentity->load($auth->toArray(['user_id','identifier','identity_type']),'');
+            $userIdentity->token=UserIdentity::generateToken();
+            $userIdentity->expire_at = $this->rememberMe ? 3600*24*30 : 0;
+            $userIdentity->save();
+            return Yii::$app->user->login($userIdentity, $this->rememberMe ? 3600*24*30 : 0);
         }
         return false;
     }
 
-    /**
-     * Finds user by [[username]]
-     *
-     * @return User|null
-     */
-    public function getUser()
+    public function getAuthentication()
     {
-        if ($this->_user === false) {
-            $this->_user = UserLogin::findByUsername($this->username);
+        if ($this->_authenticaiton === false) {
+            $this->_authenticaiton = Authentication::findOne(['identifier'=>$this->username,'identity_type'=>Authentication::TYPE_USERNAME]);
         }
 
-        return $this->_user;
+        return $this->_authenticaiton;
     }
 }

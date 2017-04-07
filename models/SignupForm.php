@@ -24,7 +24,6 @@ class SignupForm extends Model
     public function rules()
     {
         return [
-            
             ['username', 'trim'],
             ['username', 'required'],
             ['username', 'unique', 'targetClass' => 'app\models\User', 'message' => 'This username has already been taken.'],
@@ -37,10 +36,40 @@ class SignupForm extends Model
 
     public function signup()
     {
-        if ($this->validate()) {            
-            return UserLogin::signup($this);
+        if (!$this->validate()) return false;
+
+        $transaction = \Yii::$app->db->beginTransaction();
+        try
+        {        
+            $user = new User;
+            $user->username = $this->username;
+            $user->uid=User::generateUid();
+            $user->save();
+
+            $authentication=new Authentication;
+            $authentication->user_id=$user->id;
+            $authentication->identity_type=Authentication::TYPE_USERNAME;
+            $authentication->identifier=$this->username;
+            $authentication->setPassword($this->password);
+            $authentication->expire_at=0;
+            $authentication->save();
+
+            if($user->hasErrors() || $authentication->hasErrors()) {
+                var_dump($user->getErrors());
+                var_dump($authentication->getErrors());
+                exit;
+                //throw new \Exception("Error Processing Request", 1);
+            }
+
+            $transaction->commit();
+
+            return true;
         }
-        return false;
+        catch(\Exception $e)
+        {
+            $transaction->rollBack();
+            throw $e;
+        }
     }
 
     /**
@@ -51,7 +80,7 @@ class SignupForm extends Model
     public function getUser()
     {
         if ($this->_user === false) {
-            $this->_user = UserLogin::findByUsername($this->username);
+            $this->_user = User::findOne(['username'=>$this->username]);
         }
 
         return $this->_user;

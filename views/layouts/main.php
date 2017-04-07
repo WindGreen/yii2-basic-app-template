@@ -27,7 +27,7 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'My Company',
+        'brandLabel' => '',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
@@ -37,8 +37,13 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
+            ['label' => 'User', 'url' => ['/user/index']],
+            ['label' => 'AuthItem', 'url' => ['/auth-item/index']],
+            ['label' => 'AuthItemChild', 'url' => ['/auth-item-child/index']],
+            ['label' => 'AuthRule', 'url' => ['/auth-rule/index']],
+            ['label' => 'AuthAssignment', 'url' => ['/auth-assignment/index']],
+            ['label' => 'Authentication', 'url' => ['/authentication/index']],
+            ['label' => 'Session', 'url' => ['/session/index']],
             ['label' => 'Signup', 'url' => ['/site/signup']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]

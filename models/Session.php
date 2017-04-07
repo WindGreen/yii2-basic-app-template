@@ -17,7 +17,7 @@ use Yii;
  *
  * @property Authentication $user
  */
-class Session extends \yii\db\ActiveRecord
+class Session extends \app\components\ActiveRecordModel
 {
     /**
      * @inheritdoc
@@ -61,8 +61,21 @@ class Session extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
+    public function getAuthentication()
     {
         return $this->hasOne(Authentication::className(), ['user_id' => 'user_id', 'identity_type' => 'identity_type']);
     }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::className(),['id'=>'user_id']);
+    }
+
+    public static function generateToken($length=128)
+    {
+        do $token=Yii::$app->security->generateRandomString($length);
+        while(static::findOne(['token'=>$token]));
+        return strtr($token,'-','_');
+    }
+
 }

@@ -66,7 +66,8 @@ class SiteController extends Controller
 
     public function actionTest()
     {
-        echo \Yii::t('app', '首页');
+        Yii::$app->getUser()->setReturnUrl(null);
+        echo Yii::$app->getUser()->getReturnUrl(null);
     }
 
     /**

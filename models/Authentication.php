@@ -18,8 +18,10 @@ use Yii;
  * @property User $user
  * @property Session $session
  */
-class Authentication extends \yii\db\ActiveRecord
+class Authentication extends \app\components\ActiveRecordModel
 {
+    const TYPE_USERNAME=10;
+
     /**
      * @inheritdoc
      */
@@ -73,5 +75,22 @@ class Authentication extends \yii\db\ActiveRecord
     public function getSession()
     {
         return $this->hasOne(Session::className(), ['user_id' => 'user_id', 'identity_type' => 'identity_type']);
+    }
+
+
+    public function validatePassword($password)
+    {
+        return \Yii::$app->getSecurity()->validatePassword($password,$this->password);
+    }
+
+
+    public function setPassword($password)
+    {
+        $this->credential = \Yii::$app->security->generatePasswordHash($password);
+    }
+
+    public function getPassword()
+    {
+        return $this->credential;
     }
 }
