@@ -86,9 +86,9 @@ class User extends \app\components\ActiveRecordModel
 
     public static function generateUid()
     {
-        do $uid=\Yii::$app->security->generateRandomString(32);
+        do $uid=strstr(\Yii::$app->security->generateRandomString(32),'-','_');
         while(User::findOne(['uid'=>$uid]));
-        return strtr($uid,'-','_');
+        return $uid;
     }
 
 }
