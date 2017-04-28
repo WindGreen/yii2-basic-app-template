@@ -40,7 +40,7 @@ $config = [
                     ],
                     'tokens'=>[
                         '{id}'    => '<id:\\d[\\d,]*>', //default
-                        '{uid}'   => '<uid:\\w{32}>',
+                        '{uid}'   => '<uid:[\\w-_]{32}>',
                         '{token}' => '<token:[\\w-_]{128}>',
                     ],
                     'extraPatterns'=>[
