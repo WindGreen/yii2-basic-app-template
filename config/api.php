@@ -40,8 +40,8 @@ $config = [
                     ],
                     'tokens'=>[
                         '{id}'    => '<id:\\d[\\d,]*>', //default
-                        '{uid}'   => '<uid:[\\w-_]{32}>',
-                        '{token}' => '<token:[\\w-_]{128}>',
+                        '{uid}'   => '<uid:[\\w-]{32}>',
+                        '{token}' => '<token:[\\w-]{128}>',
                     ],
                     'extraPatterns'=>[
                         'PUT,PATCH {uid}'                  => 'update',
