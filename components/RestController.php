@@ -21,10 +21,17 @@ class RestController extends \yii\rest\ActiveController
     {
         if($model==null) $model=$this->modelClass;
         $modelName=(new \ReflectionClass($model))->getShortName();
-        $checkParams = $model ? [$modelName=>$model] : null;
-        if(!\Yii::$app->user->can($action.$modelName,$checkParams)) {
+
+        $params['actionName']=$action;
+        $params['model']=$model;
+        if(!isset($params['modelName']))
+            $params['modelName']=$modelName;
+        if(!isset($params['identity']))
+            $params['identity']= count($model->primaryKey())>0 ? $model->primaryKey()[0] : null;
+
+        if(!\Yii::$app->user->can($action.$modelName,$params)) {
             throw new \yii\web\ForbiddenHttpException("Forbidden $action the $modelName");
-        }   
+        }     
     }
 
     public function behaviors()

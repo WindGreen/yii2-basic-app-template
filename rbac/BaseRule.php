@@ -3,60 +3,63 @@ namespace app\rbac;
 
 use Yii;
 use yii\rbac\Rule;
-use app\models\User;
+use app\models\userId;
 
 
 class BaseRule extends Rule
 {
     public $name = 'base';
 
-    public function execute($user, $item, $params)
+    public function execute($userId, $item, $params)
     {
         $actionModel = preg_split('/(?=[A-Z])/', $item->name);
-        if(method_exists($this, $item->name)) return call_user_func([$this,$item->name],$user,$params);
-        else return call_user_func([$this,$actionModel[0]],$user,$actionModel[1],$params);
+        $actionName= isset($params['actionName']) ? $params['actionName'] : $actionModel[0];
+        //$modelName= isset($params['modelName']) ? $params['modelName'] : substr($item->name, strlen($actionName));
+
+        if(method_exists($this, $item->name)) 
+            return call_user_func([$this,$item->name],$userId,$params);
+        else if(method_exists($this, $actionName))
+            return call_user_func([$this,$actionName],$userId,$params);
+        else
+            return false;
     }
 
-    protected function view($user,$model,$params)
+    private function _viewAndModify($userId,$params)
     {
-        if(isset($params[$model]) && isset($params[$model]->id)){
-            return $params[$model]->id==$user;
-        }else return false;
+        if(isset($params['model'])){
+            $identity;
+            if(isset($params['identity']) && isset($params['model']->$params['identity']))
+                $identity=$params['model']->$params['identity'];
+            else if(isset($params['model']->created_by))
+                $identity=$params['model']->created_by;
+            else return false;
+
+            return $userId==$identity;
+        }
     }
 
-    protected function create($user,$model,$params)
+    protected function view($userId,$params)
+    {
+        return $this->_viewAndModify($userId,$params);
+    }
+
+    protected function create($userId,$params)
     {
         return true;
     }
 
-    protected function update($user,$model,$params)
+    protected function update($userId,$params)
     {
-        if(isset($params[$model]) && isset($params[$model]->id)){
-            return $params[$model]->created_by==$user;
-        }else return false;
+        return $this->_viewAndModify($userId,$params);
     }
 
-    protected function delete($user,$model,$params)
+    protected function delete($userId,$params)
     {
-        if(isset($params[$model]) && isset($params[$model]->id)){
-            return $params[$model]->created_by==$user;
-        }else return false;
+        return $this->_viewAndModify($userId,$params);
     }
 
-    protected function index($user,$model,$params)
+    protected function index($userId,$params)
     {
-        if(isset($params[$model]) && isset($params[$model]->id)){
-            return $params[$model]->created_by==$user;
-        }else return false;
-    }
-
-    protected function viewUser($user,$params)
-    {
-        return isset($params['User']) ? $params['User']->id == $user : true;
-    }
-
-    protected function updateUser($user,$params)
-    {
-        return isset($params['User']) ? $params['User']->id == $user : true;
+        return $this->_viewAndModify($userId,$params);
     }
 }
