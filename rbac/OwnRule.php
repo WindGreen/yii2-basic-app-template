@@ -6,9 +6,9 @@ use yii\rbac\Rule;
 use app\models\userId;
 
 
-class BaseRule extends Rule
+class OwnRule extends Rule
 {
-    public $name = 'base';
+    public $name = 'own';
 
     public function execute($userId, $item, $params)
     {
@@ -33,9 +33,9 @@ class BaseRule extends Rule
             else if(isset($params['model']->created_by))
                 $identity=$params['model']->created_by;
             else return false;
-
-            return $userId==$identity;
         }
+
+        return false;
     }
 
     protected function view($userId,$params)

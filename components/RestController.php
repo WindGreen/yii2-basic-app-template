@@ -26,8 +26,8 @@ class RestController extends \yii\rest\ActiveController
         $params['model']=$model;
         if(!isset($params['modelName']))
             $params['modelName']=$modelName;
-        if(!isset($params['identity']))
-            $params['identity']= count($model->primaryKey())>0 ? $model->primaryKey()[0] : null;
+        //if(!isset($params['identity']))
+            //$params['identity']= count($model->primaryKey())>0 ? $model->primaryKey()[0] : null;
 
         if(!\Yii::$app->user->can($action.$modelName,$params)) {
             throw new \yii\web\ForbiddenHttpException("Forbidden $action the $modelName");
