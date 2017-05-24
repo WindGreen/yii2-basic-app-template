@@ -39,6 +39,13 @@ class SiteController extends WebController
         return $behaviors;
     }
 
+    public function behaviors()
+    {
+        $behaviors=parent::behaviors();
+        $behaviors['access']['except']=['login','signup','logout','error'];
+        return $behaviors;
+    }
+
     /**
      * Displays homepage.
      *
