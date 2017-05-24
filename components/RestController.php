@@ -10,7 +10,7 @@ use \app\components\AccessFilter;
 class RestController extends \yii\rest\ActiveController
 {
     /**
-     * 数据级别的访问控制
+     * 数据级别的访问控制 这个可以合并到AccessFileter里面去吗？
      * 
      * @param string $action the ID of the action to be executed
      * @param object $model the model to be accessed. If null, it means no specific model is being accessed.
@@ -19,6 +19,9 @@ class RestController extends \yii\rest\ActiveController
      */
     public function checkAccess($action, $model = null, $params = [])
     {
+        if(in_array($action, $this->behaviors()['access']['except']))
+            return true;
+
         if($model==null) $model=$this->modelClass;
         $modelName=(new \ReflectionClass($model))->getShortName();
 
@@ -43,8 +46,12 @@ class RestController extends \yii\rest\ActiveController
                 [
                     'class'=>HttpBasicAuth::className(),
                     //'auth'=>[ApiIdentity::className(),'validateUidAndToken']
-                    'auth'=>[UserIdentity::className(),'findIdentityByAccessToken']
-                ]                
+                    //'auth'=>[ApiIdentity::className(),'findIdentityByAccessToken']
+                ],
+                [
+                    'class'=>SignatureAuth::className(),
+                    'auth'=>[ApiIdentity::className(),'findIdentityByIdentifier']
+                ]       
             ],
         ];
         $behaviors['access']=[

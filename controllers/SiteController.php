@@ -16,17 +16,27 @@ class SiteController extends WebController
     /**
      * @inheritdoc
      */
-    public function actions()
+    // public function actions()
+    // {
+    //     return [
+    //         'error' => [
+    //             'class' => 'yii\web\ErrorAction',
+    //         ],
+    //         'captcha' => [
+    //             'class' => 'yii\captcha\CaptchaAction',
+    //             'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+    //         ],
+    //     ];
+    // }
+    // 
+    
+    public function behaviors()
     {
-        return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-            ],
-        ];
+        $behaviors=parent::behaviors();
+
+        array_push($behaviors['access']['except'],'index','signup','login');
+
+        return $behaviors;
     }
 
     /**
