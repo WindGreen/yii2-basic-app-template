@@ -60,7 +60,7 @@ class AccessFilter extends ActionFilter
     {
         $controller=$action->controller->id;
         //$controllerName=(new \ReflectionClass($this->controller))->getShortName();
-        if(!\Yii::$app->user->can($controller)) {
+        if(!\Yii::$app->user->can('controller:'.$controller)) {
             throw new \yii\web\ForbiddenHttpException("Forbidden access controller:{$controller}");
         }
         return true;
@@ -69,7 +69,7 @@ class AccessFilter extends ActionFilter
     protected function checkModuleAccess($action)
     {
         $module=$action->controller->module->id;
-        if(!\Yii::$app->user->can($module)) {
+        if(!\Yii::$app->user->can('module:'.$module)) {
             throw new \yii\web\ForbiddenHttpException("Forbidden access module:{$module}");
         }
         return true;

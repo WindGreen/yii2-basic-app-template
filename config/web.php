@@ -3,7 +3,7 @@
 $params = require(__DIR__ . '/params.php');
 
 $config = [
-    'id' => 'invest',
+    'id' => 'app',
     'language' => 'zh-CN',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
@@ -48,7 +48,7 @@ $config = [
         ],
         */
         'authManager' => [
-            'class' => 'yii\rbac\DbManager',
+            'class' => 'app\components\DbManager',
         ],
         'i18n' => [
             'translations' => [
