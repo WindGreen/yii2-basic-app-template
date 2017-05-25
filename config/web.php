@@ -48,7 +48,7 @@ $config = [
         ],
         */
         'authManager' => [
-            'class' => 'app\components\DbManager',
+            'class' => 'yii\rbac\DbManager',
         ],
         'i18n' => [
             'translations' => [
